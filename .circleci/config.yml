@@ -1,20 +1,5 @@
 version: 2.1
 jobs:
-  build-and-test:
-    machine: true
-    steps:
-      - checkout
-      - run:
-          name: Install Docker Compose
-          command: |
-            curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
-            chmod +x ~/docker-compose
-            sudo mv ~/docker-compose /usr/local/bin/docker-compose
-      - run:
-          name: Start Docker container
-          command: |
-            set -x
-            docker-compose up -d
   deploy:
     machine: true
     steps:
@@ -30,10 +15,4 @@ jobs:
 workflows:
   build-test-deploy:
     jobs:
-      - build-and-test
-      - deploy:
-          requires:
-            - build-and-test
-          filters:
-            branches:
-              only: master
+      - deploy
