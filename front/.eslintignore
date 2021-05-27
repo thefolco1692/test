@@ -1,0 +1,13 @@
+# See https://eslint.org/docs/user-guide/configuring/ignoring-code for more about ignoring files.
+
+# Dependencies
+.yarn/*
+.pnp.*
+
+node_modules
+
+# Testing
+coverage
+
+# Production
+build
