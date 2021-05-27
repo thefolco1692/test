@@ -23,7 +23,6 @@ jobs:
           name: Update known hosts
           command: |
             ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
-            ssh-keyscan -H $SSH_DEFAULT_HOST >> ~/.ssh/known_hosts
       - run:
           name: Deploy Over SSH
           command: |
