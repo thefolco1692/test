@@ -1,0 +1,40 @@
+version: 2.1
+jobs:
+  build-and-test:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Install Docker Compose
+          command: |
+            curl -L https://github.com/docker/compose/releases/download/1.29.2/docker-compose-`uname -s`-`uname -m` > ~/docker-compose
+            chmod +x ~/docker-compose
+            sudo mv ~/docker-compose /usr/local/bin/docker-compose
+      - run:
+          name: Start Docker container
+          command: |
+            set -x
+            docker-compose up -d
+  deploy:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Update known hosts
+          command: |
+            ssh-keyscan -H $SSH_HOST >> ~/.ssh/known_hosts
+            ssh-keyscan -H $SSH_DEFAULT_HOST >> ~/.ssh/known_hosts
+      - run:
+          name: Deploy Over SSH
+          command: |
+            ssh $SSH_USER@$SSH_HOST "mkdir test";
+workflows:
+  build-test-deploy:
+    jobs:
+      - build-and-test
+      - deploy:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only: master
